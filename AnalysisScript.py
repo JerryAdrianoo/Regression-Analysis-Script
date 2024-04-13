@@ -6,7 +6,7 @@ def main(file):
     i = 0
     while i < 2:
         if os.path.exists(file) and file != "" and file.lower().endswith('.csv'):
-            print("File found successfully!")
+            print("File inserted successfully!")
             break
         else:
             print(f"File '{file}' not found or is not a valid CSV file.\n")
@@ -21,9 +21,6 @@ def treatData(before_file, after_file):
     try:
         df_before = pd.read_csv(before_file).fillna('')
         df_after = pd.read_csv(after_file).fillna('')
-        
-        if df_after is None and df_before is None:
-            raise ValueError("One or Both files are empty.")
         
         columns_before = df_before.columns.tolist()
         columns_after = df_after.columns.tolist()
@@ -67,7 +64,7 @@ def generateFiles(before_file, after_file):
         print(f"\nResults saved in '{output_before_file}' and '{output_after_file}'")
 
     except Exception as e:
-        print(f"Error while cleaning data: {e}")
+        print(f"Error while generating files: {e}")
 
 before_file = input("Enter the name of the CSV file before the regression:\n ")
 before_file = main(before_file)
