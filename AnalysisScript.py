@@ -1,26 +1,28 @@
 import pandas as pd
 import os
-import sys
-    
-def main(file):
-    i = 0
-    while i < 2:
-        if os.path.exists(file) and file != "" and file.lower().endswith('.csv'):
-            print("File inserted successfully!")
-            break
-        else:
-            print(f"File '{file}' not found or is not a valid CSV file.\n")
-            file = input("Please enter a valid CSV file name again:\n ")
-            i += 1
-    if i == 2:
-        sys.tracebacklimit = 0
-        raise Exception("File not found! Exiting the script.")
-    return file
+
+def main():
+    os.system('clear')
+    files = []
+
+    for i in range(2):
+        file = input(f"Enter the name of the CSV file {'before' if i == 0 else 'after'} the regression: ")
+
+        while not (os.path.exists(file) and file != "" and file.lower().endswith('.csv')):
+            print(f"\nFile '{file}' not found or is not a valid CSV file.\n")
+            file = input("\nPlease enter a valid CSV file name:\n ")
+
+        print("\n   File was successfully inserted!   \n")
+        files.append(file)
+    generateFiles(files[0], files[1])
 
 def treatData(before_file, after_file):
     try:
         df_before = pd.read_csv(before_file).fillna('')
         df_after = pd.read_csv(after_file).fillna('')
+        
+        if df_before is None or df_after is None:
+            raise print(Exception)
         
         columns_before = df_before.columns.tolist()
         columns_after = df_after.columns.tolist()
@@ -41,7 +43,7 @@ def treatData(before_file, after_file):
 
 def generateFiles(before_file, after_file):
     try:
-        print("\nGenerating CSV files...")
+        print("\n   Generating CSV files...   ")
         df_before, df_after = treatData(before_file, after_file)
 
         output_before_file = "New-Before.csv"
@@ -66,9 +68,5 @@ def generateFiles(before_file, after_file):
     except Exception as e:
         print(f"Error while generating files: {e}")
 
-before_file = input("Enter the name of the CSV file before the regression:\n ")
-before_file = main(before_file)
-after_file = input("\nEnter the name of the CSV file after the regression:\n ")
-after_file = main(after_file)
-
-generateFiles(before_file, after_file)
+if __name__ == "__main__":
+    main()
