@@ -10,14 +10,14 @@ def main(file):
             break
         else:
             print(f"File '{file}' not found or is not a valid CSV file.\n")
-            file = input("Please enter the CSV file name again:\n ")
+            file = input("Please enter a valid CSV file name again:\n ")
             i += 1
     if i == 2:
         sys.tracebacklimit = 0
         raise Exception("File not found! Exiting the script.")
     return file
 
-def InsertFiles(before_file, after_file):
+def treatData(before_file, after_file):
     try:
         df_before = pd.read_csv(before_file).fillna('')
         df_after = pd.read_csv(after_file).fillna('')
@@ -42,25 +42,36 @@ def InsertFiles(before_file, after_file):
     except Exception as e:
         print(f"Error while processing files: {e}")
 
-def cleanData(before_file, after_file):
+def generateFiles(before_file, after_file):
     try:
         print("\nGenerating CSV files...")
-        df_before, df_after = InsertFiles(before_file, after_file)
+        df_before, df_after = treatData(before_file, after_file)
 
         output_before_file = "New-Before.csv"
         output_after_file = "New-After.csv"
-        
+
+        i = 0
+        while os.path.exists(output_before_file):
+            i += 1
+            output_before_file = f"New-Before{i}.csv"
+
         df_before.to_csv(output_before_file, index=False)
+
+        i = 0
+        while os.path.exists(output_after_file):
+            i += 1
+            output_after_file = f"New-After{i}.csv"
+
         df_after.to_csv(output_after_file, index=False)
+
         print(f"\nResults saved in '{output_before_file}' and '{output_after_file}'")
 
     except Exception as e:
         print(f"Error while cleaning data: {e}")
 
-
-before_file = input("Enter the name of the first CSV file:\n ")
+before_file = input("Enter the name of the CSV file before the regression:\n ")
 before_file = main(before_file)
-after_file = input("\nEnter the name of the second CSV file:\n ")
+after_file = input("\nEnter the name of the CSV file after the regression:\n ")
 after_file = main(after_file)
 
-cleanData(before_file, after_file)
+generateFiles(before_file, after_file)
