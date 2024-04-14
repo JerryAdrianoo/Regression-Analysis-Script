@@ -6,15 +6,17 @@ def main():
     files = []
 
     for i in range(2):
-        file = input(f"Enter the name of the CSV file {'before' if i == 0 else 'after'} the regression: ")
+        file = input(f"\nEnter the name of the CSV file {'before' if i == 0 else 'after'} the regression: ")
 
         while not (os.path.exists(file) and file != "" and file.lower().endswith('.csv')):
             print(f"\nFile '{file}' not found or is not a valid CSV file.\n")
-            file = input("\nPlease enter a valid CSV file name:\n ")
+            file = input("\nPlease enter a valid CSV file name: ")
 
         print("\n   File was successfully inserted!   \n")
         files.append(file)
+
     generateFiles(files[0], files[1])
+    treatData(files[0], files[1])
 
 def treatData(before_file, after_file):
     try:
@@ -28,8 +30,8 @@ def treatData(before_file, after_file):
         columns_after = df_after.columns.tolist()
         
         merged = pd.merge(df_before, df_after, left_on=columns_before[0], right_on=columns_before[0], how='outer', indicator=True, suffixes=('_Before', '_After'))
-        missing_before = merged[merged['_merge'] == 'left_only'].filter(regex='^(?!.*_After).*$')
-        missing_after = merged[merged['_merge'] == 'right_only'].filter(regex='^(?!.*_Before).*$')
+        missing_before = merged[merged['_merge'] == 'left_only'].filter(regex='^(?!.*_Before).*$')
+        missing_after = merged[merged['_merge'] == 'right_only'].filter(regex='^(?!.*_After).*$')
         
         before_sorted = missing_before.sort_values(by=columns_before[0]).drop('_merge', axis=1)
         after_sorted = missing_after.sort_values(by=columns_after[0]).drop('_merge', axis=1)
