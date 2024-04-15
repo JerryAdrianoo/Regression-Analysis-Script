@@ -26,23 +26,23 @@ def treatData(before_file, after_file):
     try:
         df_before = pd.read_csv(before_file).fillna('')
         df_after = pd.read_csv(after_file).fillna('')
-        
+
         if df_before is None or df_after is None:
             raise print(f"\n\n\033[91m{KeyboardInterrupt}\033[0m")
-        
+
         columns_before = df_before.columns.tolist()
         columns_after = df_after.columns.tolist()
-        
-        merged = pd.merge(df_before, df_after, left_on=columns_before[0], right_on=columns_before[0], how='outer', indicator=True, suffixes=('_Before', '_After'))
 
-        missing_before = merged[merged['_merge'] == 'left_only'].filter(regex='^(?!.*_Before).*$')
-        missing_after = merged[merged['_merge'] == 'right_only'].filter(regex='^(?!.*_After).*$')
+        merged = pd.merge(df_before, df_after, left_on=columns_before[0], right_on=columns_after[0], how='outer', indicator=True, suffixes=('_Bifor', '_Afta'))
+
+        missing_before = merged[merged['_merge'] == 'left_only'].filter(regex='^(?!.*_Bifor).*$')
+        missing_after = merged[merged['_merge'] == 'right_only'].filter(regex='^(?!.*_Afta).*$')
 
         before_sorted = missing_before.sort_values(by=columns_before[0]).drop('_merge', axis=1)
         after_sorted = missing_after.sort_values(by=columns_after[0]).drop('_merge', axis=1)
 
-        before_sorted.columns = [col.replace('_Before', '') for col in df_before.columns]
-        after_sorted.columns = [col.replace('_After', '') for col in df_after.columns]
+        before_sorted.columns = [col.replace('_Bifor', '') for col in df_before.columns]
+        after_sorted.columns = [col.replace('_Afta', '') for col in df_after.columns]
 
         return before_sorted, after_sorted
 
