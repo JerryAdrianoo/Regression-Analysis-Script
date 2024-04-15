@@ -55,26 +55,17 @@ def extraLines(before_file, after_file):
         columns_after = df_after.columns.tolist()
         
         if 'Time (ms)' in columns_before and 'Time (ms)' in columns_after:
-            df_before_new = df_before.drop(columns=['Time (ms)'])
-            df_after_new = df_after.drop(columns=['Time (ms)'])
+            df_before = df_before.drop(columns=['Time (ms)'])
+            df_after = df_after.drop(columns=['Time (ms)'])
         
-            merged = pd.merge(df_before_new, df_after_new, how='right', indicator=True)
+        merged = pd.merge(df_before, df_after, how='right', indicator=True)
 
-            lines_merged = merged[merged['_merge'] == 'right_only'].drop('_merge', axis=1)
+        lines_merged = merged[merged['_merge'] == 'right_only'].drop('_merge', axis=1)
 
-            b_sorted = df_before_new.sort_values(by=df_before_new.columns[0])
-            a_sorted = lines_merged.sort_values(by=lines_merged.columns[0])
+        b_sorted = df_before.sort_values(by=df_before.columns[0])
+        a_sorted = lines_merged.sort_values(by=lines_merged.columns[0])
 
-            lines_after = a_sorted[~a_sorted.isin(b_sorted)].dropna()
-        else:
-            merged = pd.merge(df_before, df_after, how='right', indicator=True)
-
-            lines_merged = merged[merged['_merge'] == 'right_only'].drop('_merge', axis=1)
-
-            b_sorted = df_before.sort_values(by=df_before.columns[0])
-            a_sorted = lines_merged.sort_values(by=lines_merged.columns[0])
-
-            lines_after = a_sorted[~a_sorted.isin(b_sorted)].dropna()
+        lines_after = a_sorted[~a_sorted.isin(b_sorted)].dropna()
 
         return lines_after
 
