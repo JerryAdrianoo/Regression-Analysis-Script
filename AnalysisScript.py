@@ -2,22 +2,25 @@ import pandas as pd
 import os
 
 def main():
-    os.system('clear')
+    try:
+        os.system('clear')
 
-    files = []
+        files = []
 
-    for i in range(2):
-        file = input(f"\nEnter the name of the CSV file {'before' if i == 0 else 'after'} the regression: ")
+        for i in range(2):
+            file = input(f"\n\033[92mEnter the name of the CSV file {'before' if i == 0 else 'after'} the regression: \033[0m")
 
-        while not (os.path.exists(file) and file != "" and file.lower().endswith('.csv')):
-            print(f"\nFile '{file}' not found or is not a valid CSV file.\n")
+            while not (os.path.exists(file) and file != "" and file.lower().endswith('.csv')):
+                print(f"\n\n\033[91mFile '{file}' not found or is not a valid CSV file.\n\033[0m")
 
-            file = input("\nPlease enter a valid CSV file name: ")
+                file = input("\n\033[92mPlease enter a valid CSV file name: \033[0m")
 
-        print("\n\n   File was successfully inserted!   \n")
-        files.append(file)
+            print("\n\n\033[94m   File was successfully inserted!   \n\033[0m")
+            files.append(file)
 
-    generateFiles(files[0], files[1])
+        generateFiles(files[0], files[1])
+    except KeyboardInterrupt as e:
+        print(f"\n\n\033[91m   Error while reading files {e}   \n\033[0m")
 
 def treatData(before_file, after_file):
     try:
@@ -25,7 +28,7 @@ def treatData(before_file, after_file):
         df_after = pd.read_csv(after_file).fillna('')
         
         if df_before is None or df_after is None:
-            raise print(Exception)
+            raise print(f"\n\n\033[91m{KeyboardInterrupt}\033[0m")
         
         columns_before = df_before.columns.tolist()
         columns_after = df_after.columns.tolist()
@@ -43,8 +46,8 @@ def treatData(before_file, after_file):
 
         return before_sorted, after_sorted
 
-    except Exception as e:
-        print(f"Error while processing files: {e}")
+    except KeyboardInterrupt as e:
+        print(f"\033[91mError while processing files: {e}\033[0m")
 
 def extraLines(before_file, after_file):
     try:
@@ -69,13 +72,13 @@ def extraLines(before_file, after_file):
 
         return lines_after
 
-    except Exception as e:
-        print(f"Error while analyzing and saving extra lines: {e}")
+    except KeyboardInterrupt as e:
+        print(f"\033[91mError while analyzing and saving extra lines: {e}\033[0m")
 
 
 def generateFiles(before_file, after_file):
     try:
-        print("\n   Generating CSV files...   \n")
+        print("\n\033[94m   Generating CSV files...   \n\n\033[0m")
 
         df_before, df_after = treatData(before_file, after_file)
         df_extraLines = extraLines(before_file, after_file)
@@ -98,10 +101,10 @@ def generateFiles(before_file, after_file):
 
             df.to_csv(new_file_name, index=False, encoding='utf-8', sep=",")
 
-            print(f"Results saved in '{new_file_name}'")
+            print(f"\033[92mResults saved in '{new_file_name}'\033[0m")
 
-    except Exception as e:
-        print(f"Error while generating files: {e}")
+    except KeyboardInterrupt as e:
+        print(f"\033[91mError while generating files: {e}\033[0m")
 
 
 if __name__ == "__main__":
