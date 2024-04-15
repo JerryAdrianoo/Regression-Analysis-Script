@@ -18,9 +18,7 @@ def main():
         files.append(file)
 
     generateFiles(files[0], files[1])
-
     treatData(files[0], files[1])
-
     extraLines(files[0], files[1])
 
 def treatData(before_file, after_file):
@@ -46,6 +44,7 @@ def treatData(before_file, after_file):
         after_sorted.columns = [col.replace('_After', '') for col in df_after.columns]
 
         return before_sorted, after_sorted
+
     except Exception as e:
         print(f"Error while processing files: {e}")
 
@@ -88,14 +87,16 @@ def extraLines(before_file, after_file):
 def generateFiles(before_file, after_file):
     try:
         print("\n   Generating CSV files...   \n")
-        df_extraLines = extraLines(before_file, after_file)
+
         df_before, df_after = treatData(before_file, after_file)
+        df_extraLines = extraLines(before_file, after_file)
 
         output_before_file = "New-Before.csv"
         output_after_file = "New-After.csv"
         output_extra_file = "Extra-Lines-After.csv"
 
 #===========================================================Before and After Files===========================================================
+
         i = 0
 
         while os.path.exists(output_before_file):
@@ -115,6 +116,7 @@ def generateFiles(before_file, after_file):
         print(f"\nResults saved in '{output_before_file}' and '{output_after_file}'")
 
 #===========================================================Extra Lines File===========================================================
+
         i = 0
 
         while os.path.exists(output_extra_file):
