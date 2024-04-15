@@ -14,7 +14,7 @@ def main():
 
             file = input("\nPlease enter a valid CSV file name: ")
 
-        print("\n   File was successfully inserted!   \n")
+        print("\n\n   File was successfully inserted!   \n")
         files.append(file)
 
     generateFiles(files[0], files[1])
@@ -89,12 +89,16 @@ def generateFiles(before_file, after_file):
 
         for file_name, df in zip(file_names, data_frames):
             i = 0
-            while os.path.exists(file_name):
-                i += 1
-                file_name = f"{file_name.split('.')[0]} ({i}).csv"
+            base_name, extension = os.path.splitext(file_name)
+            new_file_name = file_name
 
-            df.to_csv(file_name, index=False)
-            print(f"Results saved in '{file_name}'")
+            while os.path.exists(new_file_name):
+                i += 1
+                new_file_name = f"{base_name} ({i}){extension}"
+
+            df.to_csv(new_file_name, index=False, encoding='utf-8', sep=",")
+
+            print(f"Results saved in '{new_file_name}'")
 
     except Exception as e:
         print(f"Error while generating files: {e}")
