@@ -18,8 +18,6 @@ def main():
         files.append(file)
 
     generateFiles(files[0], files[1])
-    treatData(files[0], files[1])
-    extraLines(files[0], files[1])
 
 def treatData(before_file, after_file):
     try:
@@ -95,39 +93,17 @@ def generateFiles(before_file, after_file):
         output_after_file = "New-After.csv"
         output_extra_file = "Extra-Lines-After.csv"
 
-#===========================================================Before and After Files===========================================================
+        file_names = [output_before_file, output_after_file, output_extra_file]
+        data_frames = [df_before, df_after, df_extraLines]
 
-        i = 0
+        for file_name, df in zip(file_names, data_frames):
+            i = 0
+            while os.path.exists(file_name):
+                i += 1
+                file_name = f"{file_name.split('.')[0]} ({i}).csv"
 
-        while os.path.exists(output_before_file):
-            i += 1
-            output_before_file = f"New-Before ({i}).csv"
-
-        df_before.to_csv(output_before_file, index=False)
-
-        i = 0
-
-        while os.path.exists(output_after_file):
-            i += 1
-            output_after_file = f"New-After ({i}).csv"
-
-        df_after.to_csv(output_after_file, index=False)
-
-        print(f"\nResults saved in '{output_before_file}' and '{output_after_file}'")
-
-#===========================================================Extra Lines File===========================================================
-
-        i = 0
-
-        while os.path.exists(output_extra_file):
-            i += 1
-            output_extra_file = f"Extra-Lines-After ({i}).csv"
-            
-        print(f"\n\n   Generating {output_extra_file}...   \n")
-
-        df_extraLines.to_csv(output_extra_file, index=False)
-        
-        print(f"\nResult saved in {output_extra_file}\n")
+            df.to_csv(file_name, index=False)
+            print(f"Results saved in '{file_name}'")
 
     except Exception as e:
         print(f"Error while generating files: {e}")
