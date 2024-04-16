@@ -8,14 +8,14 @@ def main():
         files = []
 
         for i in range(2):
-            file = input(f"\n\033[92mEnter the name of the CSV file {'before' if i == 0 else 'after'} the regression: \033[0m")
+            file = input(f"\n\033[96mEnter the name of the CSV file \033[1m{'before' if i == 0 else 'after'}\033[0m \033[96mthe regression: \033[0m")
 
             while not (os.path.exists(file) and file != "" and file.lower().endswith('.csv')):
                 print(f"\n\n\033[91mFile '{file}' not found or is not a valid CSV file.\n\033[0m")
 
-                file = input("\n\033[92mPlease enter a valid CSV file name: \033[0m")
+                file = input("\n\033[96mPlease enter a valid CSV file name: \033[0m")
 
-            print("\n\n\033[94m   File was successfully inserted!   \n\033[0m")
+            print("\033[92m\n\n   File was successfully inserted!   \n\033[0m")
             files.append(file)
 
         generateFiles(files[0], files[1])
@@ -78,7 +78,7 @@ def extraLines(before_file, after_file):
 
 def generateFiles(before_file, after_file):
     try:
-        print("\n\033[94m   Generating CSV files...   \n\n\033[0m")
+        print("\033[96m\n   Generating CSV files...   \n\n\033[0m")
 
         df_before, df_after = treatData(before_file, after_file)
         df_extraLines = extraLines(before_file, after_file)
