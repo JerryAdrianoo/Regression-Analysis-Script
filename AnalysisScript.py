@@ -28,7 +28,7 @@ def treatData(before_file, after_file):
         df_after = pd.read_csv(after_file).fillna('')
 
         if df_before is None or df_after is None:
-            raise print(f"\n\n\033[91m{KeyboardInterrupt}\033[0m")
+            raise print(f"\n\n\033[91m{Exception}\033[0m")
 
         columns_before = df_before.columns.tolist()
         columns_after = df_after.columns.tolist()
@@ -53,14 +53,14 @@ def extraLines(before_file, after_file):
     try:
         df_before = pd.read_csv(before_file).fillna('')
         df_after = pd.read_csv(after_file).fillna('')
-        
+
         columns_before = df_before.columns.tolist()
         columns_after = df_after.columns.tolist()
-        
+
         if 'Time (ms)' in columns_before and 'Time (ms)' in columns_after:
             df_before = df_before.drop(columns=['Time (ms)'])
             df_after = df_after.drop(columns=['Time (ms)'])
-        
+
         merged = pd.merge(df_before, df_after, how='right', indicator=True)
 
         lines_merged = merged[merged['_merge'] == 'right_only'].drop('_merge', axis=1)
