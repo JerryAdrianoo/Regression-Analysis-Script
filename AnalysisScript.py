@@ -10,13 +10,13 @@ def main():
         for i in range(2):
             file = input(f"\n\033[96mEnter the name of the CSV file \033[1m{'before' if i == 0 else 'after'}\033[0m \033[96mthe regression: \033[0m")
 
-            while not (os.path.exists(file) and file != "" and file.lower().endswith('.csv')):
+            if not (os.path.exists(file) and file != "" and file.lower().endswith('.csv')):
                 print(f"\n\n\033[91mFile '{file}' not found or is not a valid CSV file.\n\033[0m")
 
-                file = input("\n\033[96mPlease enter a valid CSV file name: \033[0m")
-
-            print("\033[92m\n\n   File was successfully inserted!   \n\033[0m")
-            files.append(file)
+                file = input("\n\033[96mPlease enter a valid CSV file name: \033[0m\n")
+            else:
+                print("\033[92m\n\n   File was successfully inserted!   \n\033[0m")
+                files.append(file)
 
         generateFiles(files[0], files[1])
     except KeyboardInterrupt as e:
@@ -99,7 +99,7 @@ def generateFiles(before_file, after_file):
                 i += 1
                 new_file_name = f"{base_name} ({i}){extension}"
 
-            df.to_csv(new_file_name, index=False, encoding='utf-8', sep=",")
+            df.to_csv(new_file_name, index=False)
 
             print(f"\033[92mResults saved in '{new_file_name}'\033[0m")
 
