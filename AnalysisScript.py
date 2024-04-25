@@ -83,8 +83,8 @@ def generateFiles(before_file, after_file):
         df_before, df_after = treatData(before_file, after_file)
         df_extraLines = extraLines(before_file, after_file)
 
-        output_before_file = "New-Before.csv"
-        output_after_file = "New-After.csv"
+        output_before_file = "New-Previous-File.csv"
+        output_after_file = "New-Later-File.csv"
         output_extra_file = "Extra-Lines-After.csv"
 
         file_names = [output_before_file, output_after_file, output_extra_file]
